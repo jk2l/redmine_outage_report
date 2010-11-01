@@ -1,0 +1,32 @@
+<% form_tag({}) do -%>
+  <%= hidden_field_tag 'back_url', url_for(params) %>
+  <div class="autoscroll">
+    <table class="list issues">
+      <thead>
+        <tr>
+          <th><%= link_to image_tag('toggle_check.png'), {}, :onclick => 'toggleIssuesSelection(Element.up(this, "form")); return false;',
+              :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+          </th>
+          <th>#</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Title</th>
+          <th>Created by</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reports.each do |report| -%>
+          <tr id="outage_report-<%= report.id %>" class="hascontextmenu <%= cycle('odd', 'even') %> issue">
+            <td class="checkbox"><%= check_box_tag("ids[]", report.id, false, :id => nil) %></td>
+            <td class="id"><%= link_to report.id, :controller => 'outage_reports', :action => 'show', :id => report, :project_id => @project %></td>
+            <td class="date">Outage Report at <%= report.started_at.to_date %></td>
+            <td class="status"><%= report.report_status.name %></td>
+            <td class="subject"><%= link_to report.title, :controller => 'outage_reports', :action => 'show', :id => report, :project_id => @project %></td>
+            <td class="author"><%= link_to report.author.name, :controller => 'users', :action => 'show', :id => report.author %></td>
+          </tr>
+        <% end -%>
+      </tbody>
+    </table>
+  </div>
+<% end -%>
+

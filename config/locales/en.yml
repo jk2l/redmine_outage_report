@@ -1,3 +1,5 @@
 # English strings go here for Rails i18n
 en:
-  my_label: "My label"
+  field_classifications: "Classification"
+  field_report_status: "Report Status"
+  field_started_at: "Date"

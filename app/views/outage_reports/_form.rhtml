@@ -1,0 +1,17 @@
+<%= error_messages_for 'outage_reports' %>
+
+<div class="box">
+<p><%= f.text_field :title, :size => 100, :required => true, :tabindex => autotab %><br /><em><%= l(:text_caracters_maximum, 255) %></em></p>
+<p><%= f.select :report_status_id, (@report_statuses.collect {|s| [s.name, s.id]}), { :required => true }, { :tabindex => autotab } %></p>
+
+<p><%= f.text_field :started_at, :size => 10, :required => true  %><%= calendar_for('outage_report_started_at') %></p>
+<p><label for="outage_report_classifications"><%=l(:field_classifications)%></label>
+<%= select_tag "outage_report[classification_ids][]",
+              options_for_select(@report_classifications.collect {|s| [s.name, s.id]}, @outage_report.classifications),
+              :multiple => true,
+              :size => @report_classifications.size,
+              :tabindex => autotab%></p>
+
+<p><%= f.text_area :description, :rows => 25, :class => 'wiki-edit', :tabindex => autotab %></p>
+<%= wikitoolbar_for 'outage_report_description' %>
+</div>

@@ -1,0 +1,77 @@
+<div class="contextual">
+  <%= link_to_if_authorized("Edit", {:project_id => @project, :action => 'edit', :id => @outage_report}, :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %>
+</div>
+
+<h2>Outage Report at <%= @outage_report.started_at.to_date %> </h2>
+<div class="issue details">
+  <h3><%=h @outage_report.title%></h3>
+  <p class="author">
+    <%= authoring @outage_report.created_at, @outage_report.author %>.
+    <% if @outage_report.created_at != @outage_report.updated_at %>
+    <%= l(:label_updated_time, time_tag(@outage_report.updated_at)) %>.
+    <% end %>
+  </p>
+
+  <table width="100%">
+  <tr>
+      <td style="width:15%" class="status"><b><%=l(:field_status)%>:</b></td><td style="width:35%" class="status"><%= @outage_report.report_status.name %></td>
+  </tr>
+  <tr>
+      <td style="width:15%" class="Classifications"><b><%=l(:field_classifications)%>:</b></td>
+      <td style="width:35%" class="Classifications-name">
+      <% @outage_report.classifications.each do |classification| %>
+        <%= classification.name %> <br>
+      <% end %>
+      </td>
+  </tr>
+  </table>
+  <hr />
+  <p><strong><%=l(:field_description)%></strong></p>
+  <div class="wiki">
+    <%= textilizable @outage_report.description%>
+  </div>
+</div>
+
+<div id="related_issues">
+  <h3>Issues</h3>
+  <%= error_messages_for 'outage_report_issue' %>
+  <table class="list">
+    <thead><tr>
+        <th>#</th>
+        <th>Relationship with Report</th>
+        <th>Status</th>
+        <th>Subject</th>
+    </tr></thead>
+    <tbody>
+      <% @outage_report.issues.each do |relatedIssue|%>
+        <% issue = relatedIssue.issue %>
+        <tr class="<%= cycle("odd", "even") %>">
+          <td><%= link_to(issue.id, :controller => 'issues', :action => 'show', :id => issue) %></td>
+          <td><%= relatedIssue.relationships  %></td>
+          <td><%= issue.status  %></td>
+          <td><%= link_to(issue.subject, :controller => 'issues', :action => 'show', :id => issue) %></td>
+        </tr>
+      <% end %>
+        <tr class="<%= cycle("odd", "even") %>" id="add_issue_form_row">
+          <td colspan="5">
+            <% labelled_tabular_form_for :outage_report_issue, nil, :url => { :project_id => @project, :action => "connect", :controller => 'outage_report_issues' } do |f| %>
+              <%= hidden_field_tag 'new_relationship[outage_report_id]', @outage_report.id  %>
+              <%= select_tag "new_relationship[relationships]",
+                options_for_select(OutageReportIssue.available_report_to_issue),
+                :tabindex => autotab%>
+              Issue # <%= text_field_tag "new_relationship[issue_id]", nil, :size => 10, :tabindex => autotab %>
+              <%= submit_tag "Add", :tabindex => autotab %>
+            <% end %>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  <%#*<div id="add_issue_link">%>
+    <%#= link_to_function "Add Related Issue", "showForm('add_issue')", :class => 'icon icon-add' %>
+  <%#*</div>%>
+  <%#= javascript_tag "initializeForm('add_issue');" %>
+</div>
+<p><br></p>
+<div id="related_discussions">
+  <h3>Discussions</h3>
+</div>

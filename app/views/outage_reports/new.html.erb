@@ -1,0 +1,6 @@
+<h2>New Outage report</h2>
+
+<% labelled_tabular_form_for :outage_reports, nil, :url => { :project_id => @project, :action => "new" } do |f| %>
+<%= render :partial => 'form', :locals => { :f => f } %>
+<%= submit_tag l(:button_save), :tabindex => autotab %>
+<% end %>

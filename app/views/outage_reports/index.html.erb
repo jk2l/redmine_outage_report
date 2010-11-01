@@ -1,0 +1,14 @@
+<div class="contextual">
+  <% #if User.current.allowed_to?(:add_subprojects, @project) %>
+    <%= link_to "New Report", {:controller => 'outage_reports', :action => 'new', :project_id => @project}, :class => 'icon icon-add' %>
+  <% #end %>
+</div>
+
+<h2>Outage Report</h2>
+
+<% if @reports.empty? %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+  <%= render :partial => 'list', :locals => {:reports => @reports} %>
+  <p class="pagination"><%= pagination_links_full @report_pages, @report_count %></p>
+<% end %>

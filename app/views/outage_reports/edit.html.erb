@@ -1,0 +1,6 @@
+<h2>Edit Outage report</h2>
+
+<% labelled_tabular_form_for :outage_report, nil, :url => { :project_id => @project, :action => "edit" } do |f| %>
+<%= render :partial => 'form', :locals => { :f => f } %>
+<%= submit_tag l(:button_save), :tabindex => autotab %>
+<% end %>
